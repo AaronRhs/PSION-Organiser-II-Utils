@@ -1,0 +1,48 @@
+LOCK:
+
+REM provides basic password protection
+REM improved version based on an example from the original manual
+
+REM NO WARRANTY !!! THIS CODE IS EXPERIMENTAL AND THEREFORE NOT SUITABLE FOR EVERYDAY USE
+REM MAKE SURE YOU REVIEW AND ENTER THIS CODE CARFULLY AND REMEMBER YOUR PASSWORD
+REM !!! YOU MAY END UP IN A DEADLOCK, LOOSING EVERYTHING STORED ON A:, OTHERWISE !!!
+
+REM K%: read key, S$(16) the entered password
+LOCAL K%, S$(16)
+REM on RAISE, we will jump here (yes, this is exception handling ;) ! )
+ONERR START::
+START::
+CLS
+REM switch off the device
+OFF
+REM after switching on, the execution continues here
+S$=""
+WHILE 1
+  K%=GET
+  IF K%=13
+    REM 'enter' key pressed
+    BREAK
+  ELSEIF K%=8
+    REM 'del' key pressed
+    CLS
+    S$=""
+    CONTINUE
+  ENDIF
+  REM obscured representation with '*'
+  PRINT "*";
+  S$=S$+CHR$(K%)
+ENDWH
+PRINT
+
+REM you may want to alter this password
+IF S$="DROWSSAP"
+  PRINT "OK"
+  PAUSE 20
+ELSE
+  PRINT "FAIL",
+  PAUSE 20
+  PRINT "OFF"
+  PAUSE 20
+  REM raising an error, causes starting over at START::
+  RAISE 88
+ENDIF
